@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Cart</title><link rel="stylesheet" href="css/styles.css"></head>
+<body>
+  <header>
+    <div><h3 style="margin:0">My Shop</h3></div>
+    <div><a href="index.html">Continue Shopping</a></div>
+  </header>
+  <main class="container">
+    <h2>Your Cart</h2>
+    <div id="cart-contents"></div>
+    <p><strong>Total: ₹<span id="cart-total">0</span></strong></p>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script>
+
+    requireLogin('user');
+    document.addEventListener('DOMContentLoaded', renderCart);
+  </script>
+</body>
+</html>

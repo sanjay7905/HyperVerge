@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Add / Edit Product</title><link rel="stylesheet" href="../css/styles.css"></head>
+<body>
+  <main class="container">
+    <h2 id="form-title">Add / Edit Product</h2>
+    <form id="productForm" class="form">
+      <input id="pid" type="hidden">
+      <input id="name" placeholder="Product name" required>
+      <input id="price" placeholder="Price" type="number" required>
+      <input id="image" placeholder="Image URL">
+      <textarea id="desc" placeholder="Description"></textarea>
+      <button class="btn" type="submit">Save</button>
+      <a href="dashboard.html" style="margin-left:8px">Cancel</a>
+    </form>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/products.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    requireLogin('admin');
+    document.addEventListener('DOMContentLoaded', initProductForm);
+  </script>
+</body>
+</html>

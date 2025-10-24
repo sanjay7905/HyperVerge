@@ -1,0 +1,16 @@
+[
+  {
+    "id": "p1",
+    "name": "Red T-shirt",
+    "price": 399,
+    "image": "https://via.placeholder.com/200x150?text=Red+T-shirt",
+    "desc": "Comfortable cotton tee"
+  },
+  {
+    "id": "p2",
+    "name": "Blue Jeans",
+    "price": 1299,
+    "image": "https://via.placeholder.com/200x150?text=Blue+Jeans",
+    "desc": "Classic denim jeans"
+  }
+]
