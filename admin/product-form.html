@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Add/Edit Product</title>
+        <link rel="stylesheet" href="../css/styles.css">
+    </head>
+<body>
+    <main class="container">
+        <h2>Add / Edit Product</h2>
+        <form id="productForm" class="card">
+<input id="prodId" type="hidden">
+<label>Name<input id="name" required></label>
+<label>Price<input id="price" type="number" required></label>
+<label>Image URL<input id="imageUrl" placeholder="http(s) or data URL"></label>
+<label>Upload Image<input id="imageFile" type="file" accept="image/*"></label>
+<img id="preview" style="display:none;max-width:200px;margin-top:8px;border-radius:6px">
+<label>Description<textarea id="desc"></textarea></label>
+<div style="display:flex;gap:12px">
+    <button type="submit">Save</button>
+    <a href="dashboard.html">Cancel</a>
+</div>
+</form>
+</main>
+<script src="../js/auth.js"></script>
+<script>if(!requireLogin('admin')) throw '';</script>
+<script>
+const imageFile=document.getElementById('imageFile'), imageUrl=document.getElementById('imageUrl'), preview=document.getElementById('preview'), prodId=document.getElementById('prodId');
+function showPreview(src){ 
+    preview.src=src; preview.style.display='block'; 
+}
+imageFile.addEventListener('change', e=>{ 
+    const file=e.target.files[0]; 
+    if(!file) return; 
+    if(file.size>800*1024){ 
+        alert('Image too large'); 
+        return;
+    } 
+    const reader=new FileReader(); 
+    reader.onload=ev=>{ 
+        imageUrl.value=ev.target.result; 
+        showPreview(ev.target.result); 
+    }; 
+    reader.readAsDataURL(file); 
+});
+const editId=Number(localStorage.getItem('editProductId')||'0'); 
+if(editId){ 
+    const localProducts=JSON.parse(localStorage.getItem('products')||'[]'); 
+    const p=localProducts.find(x=>x.id===editId); 
+    if(p){ prodId.value=p.id; 
+        document.getElementById('name').value=p.name; 
+        document.getElementById('price').value=p.price; 
+        document.getElementById('imageUrl').value=p.image; 
+        document.getElementById('desc').value=p.desc; 
+        if(p.image) showPreview(p.image);
+    } 
+    localStorage.removeItem('editProductId'); 
+}
+document.getElementById('productForm').addEventListener('submit', e=>{ 
+    e.preventDefault(); 
+    let localProducts=JSON.parse(localStorage.getItem('products')||'[]'); 
+    const id=prodId.value?Number(prodId.value):(localProducts.length?Math.max(...localProducts.map(p=>p.id))+1:Date.now()); 
+    const prod={ id, name:document.getElementById('name').value.trim(), price:Number(document.getElementById('price').value), image:document.getElementById('imageUrl').value.trim(), desc:document.getElementById('desc').value.trim() }; 
+    const idx=localProducts.findIndex(p=>p.id===id); 
+    if(idx>=0) localProducts[idx]=prod; 
+    else localProducts.push(prod); 
+    localStorage.setItem('products', JSON.stringify(localProducts)); 
+    alert('Saved'); 
+    window.location='dashboard.html'; 
+    });
+</script>
+</body>
+</html>
