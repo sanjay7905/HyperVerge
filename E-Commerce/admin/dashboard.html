@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Admin</title>
+        <link rel="stylesheet" href="../css/styles.css">
+    </head>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <a href="../index.html">Admin</a>
+        </div>
+        <nav class="nav">
+            <a href="product-form.html">Add Product</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </nav>
+    </header>
+<main class="container">
+    <h2>Products</h2>
+    <div id="admin-products" class="grid"></div>
+</main>
+
+  <script src="../js/load-products.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+if (!requireLogin('admin')) throw '';
+
+    function renderAdmin() {
+      const all = window.getAllProducts();
+      const out = document.getElementById('admin-products');
+      out.innerHTML = '';
+
+      if (all.length === 0) {
+        out.innerHTML = "<p>No products available.</p>";
+        return;
+      }
+
+      all.forEach(p => {
+        out.innerHTML += `
+          <div class="product-card card">
+            <img src="${p.image}" alt="${p.name}" style="width:180px;height:150px;object-fit:cover;">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.desc}</p>
+            <div style="display:flex;gap:8px;justify-content:center">
+              <button onclick="editProd(${p.id})">Edit</button>
+              <button onclick="deleteProd(${p.id})">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function editProd(id) {
+      localStorage.setItem('editProductId', id);
+      window.location = 'product-form.html';
+    }
+
+    function deleteProd(id) {
+      if (!confirm('Delete this product?')) return;
+      let all = JSON.parse(localStorage.getItem('products') || '[]');
+      all = all.filter(x => x.id !== id);
+      localStorage.setItem('products', JSON.stringify(all));
+      renderAdmin();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => logout());
+    renderAdmin();</script>
+   </boby>
+</html>
